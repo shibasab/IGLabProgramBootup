@@ -2,7 +2,9 @@
 #include "MainForm.h"
 #include "TCore.h"
 
-
+// ‘å‚«‚­‚·‚é
+// pickŽž‚É‰ñ“]‚·‚é
+// getNearestŽž‚É‚à‰ñ“]‚·‚é
 
 #pragma comment( lib, "opengl32.lib" )
 #pragma comment( lib, "glu32.lib" )
@@ -27,7 +29,20 @@ void MainForm::RedrawMainPanel()
   float  farDist  = 1000.0f;
   m_ogl->OnDrawBegin(m_main_panel->Width, m_main_panel->Height, fovY, nearDist, farDist);
 
+  //initialize ogl parameters
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
+  glEnable(GL_LIGHT2);
+  glDisable(GL_BLEND);
+  glEnable(GL_DEPTH_TEST);
+
+
+  TCore::getInst()->DrawScene();
+
   //‚±‚±‚ÉƒŒƒ“ƒ_ƒŠƒ“ƒOƒ‹[ƒ`ƒ“‚ð‘‚­
+  glLineWidth(2);
   glBegin(GL_LINES );
     glColor3d(1,0,0); glVertex3d(0,0,0); glVertex3d(10,0,0);
     glColor3d(0,1,0); glVertex3d(0,0,0); glVertex3d(0,10,0);
@@ -77,7 +92,7 @@ static void CALLBACK MyTimerProc(
     DWORD dwTime         // system time
 )
 {
-  printf("a");
+  TCore::getInst()->StepTime();
   SolidSimulator::RedrawMainWindow();
 }
 

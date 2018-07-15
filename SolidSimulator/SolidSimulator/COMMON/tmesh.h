@@ -25,6 +25,10 @@ public:
   void Set(const TPoly &p) {
     memcpy(idx, p.idx, sizeof(int) * 3);
   }
+  void Set(const int v0, const int v1, const int v2) {
+    idx[0] = v0; idx[1] = v1; idx[2] = v2;
+  }
+
   TPoly& operator= (const TPoly  &v) { Set(v); return *this; }
 };
 
@@ -574,6 +578,42 @@ public:
     //todo
   }
 
+  
+  void initializeAsCube( float sizeX, float sizeY, float sizeZ)
+  {	
+	  vector<EVec3f> Vs( 8);
+	  vector<TPoly > Ps(20);
+	  Vs[0] <<  0    ,  0   , 0	    ;
+	  Vs[1] <<  sizeX,  0   , 0	    ;
+	  Vs[2] <<  sizeX, sizeY, 0	    ;
+	  Vs[3] <<  0    , sizeY, 0     ;
+	  Vs[4] <<  0    ,  0   , sizeZ ;
+	  Vs[5] <<  sizeX,  0   , sizeZ ;
+	  Vs[6] <<  sizeX, sizeY, sizeZ ;
+	  Vs[7] <<  0    , sizeY, sizeZ ;
+	  Ps[ 0].Set( 0,2,1) ;
+	  Ps[ 1].Set( 0,3,2) ;
+	  Ps[ 2].Set( 4,5,6) ;
+	  Ps[ 3].Set( 4,6,7) ;
+	  Ps[ 4].Set( 0,1,5) ;
+	  Ps[ 5].Set( 0,5,4) ;
+	  Ps[ 6].Set( 3,6,2) ;
+	  Ps[ 7].Set( 3,7,6) ;
+	  Ps[ 8].Set( 1,2,6) ;
+	  Ps[ 9].Set( 1,6,5) ;
+	  Ps[10].Set( 0,7,3) ;
+	  Ps[11].Set( 0,4,7) ;
+	  initialize( Vs, Ps );
+  }
+
+
+
+
+
+
+
+
+
 
 
   bool pickByRay(const EVec3f &rayP, const EVec3f &rayD, EVec3f &pos) const
@@ -614,6 +654,21 @@ public:
     m.draw(diff, ambi, spec, shin);
     glPopMatrix();
     glDisable( GL_NORMALIZE);
+  }
+
+
+  int getCrosestVtxIdx(const EVec3f &p)
+  {
+    int idx= -1;
+    float minD = FLT_MAX;
+    for( int i=0; i < m_vSize; ++i){
+      float d = t_dist(m_vVerts[i], p);
+      if( minD > d){
+        minD = d;
+        idx = i;
+      }
+    }
+    return idx;
   }
 };
 
