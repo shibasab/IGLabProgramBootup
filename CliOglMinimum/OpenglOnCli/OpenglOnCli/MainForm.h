@@ -23,10 +23,7 @@ namespace OpenglOnCli {
 
 	private:
 		MainForm(void);
-    
     OglForCLI *m_ogl;  
-
-    bool m_bBtnDown;
 
   private: 
     static MainForm^ m_singleton;
@@ -111,4 +108,8 @@ namespace OpenglOnCli {
   private: System::Void MainForm_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
   private: System::Void MainForm_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
   };
+
+  inline void MainForm_RedrawPanel(){
+    MainForm::GetInst()->RedrawMainPanel();
+  }
 }
