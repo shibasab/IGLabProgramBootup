@@ -2,7 +2,7 @@
 #include "MainForm.h"
 #include "EventManager.h"
 
-
+#include "math.h"
 
 
 
@@ -159,15 +159,44 @@ void EventManager::DrawScene()
   
 
   glBegin(GL_TRIANGLES );
-  glNormal3f(0,0,1);
-  glVertex3f(0,0,0);
-  glVertex3f(1,0,0);
-  glVertex3f(1,1,0);
+  
+  int Ni = 200;
+  int Nj = 200;
+  double p1, t1, p2, t2;
+  static double PI = 3.1415926535897932384626433832795028841971693993751058209749445928078164062;
 
-  glNormal3f(0,1,0);
-  glVertex3f(0,0,0);
-  glVertex3f(1,0,0);
-  glVertex3f(1,0,1);
+  for (int i=0; i<Ni; i++) {
+	  for (int j=0; j<Nj; j++) {
+		  p1 = PI  * i / (Ni) - PI/2;
+		  t1 = PI * 2.0 * j / (Nj);
+		  p2 = PI * (i+1) / (Ni)-PI / 2;
+		  t2 = PI * 2.0 * (j+1) / (Nj);
+
+
+		  
+		  glNormal3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
+		  glVertex3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
+
+		  glNormal3f(cos(p2)*cos(t1), sin(p2), -1 * cos(p2)*sin(t1));
+		  glVertex3f(cos(p2)*cos(t1), sin(p2), -1*cos(p2)*sin(t1));
+
+		  glNormal3f(cos(p2)*cos(t2), sin(p2), -1 * cos(p2)*sin(t2));
+		  glVertex3f(cos(p2)*cos(t2), sin(p2), -1*cos(p2)*sin(t2));
+
+
+
+		  glNormal3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
+		  glVertex3f(cos(p1)*cos(t1), sin(p1), -1 * cos(p1)*sin(t1));
+
+		  glNormal3f(cos(p1)*cos(t2), sin(p1), -1 * cos(p1)*sin(t2));
+		  glVertex3f(cos(p1)*cos(t2), sin(p1), -1 * cos(p1)*sin(t2));
+
+		  glNormal3f(cos(p2)*cos(t2), sin(p2), -1 * cos(p2)*sin(t2));
+		  glVertex3f(cos(p2)*cos(t2), sin(p2), -1*cos(p2)*sin(t2));
+
+	  }
+  }
+
 
 
   glEnd();
