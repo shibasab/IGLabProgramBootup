@@ -41,9 +41,9 @@ typedef Eigen::Matrix4d EMat4d;
 #endif
 
 
-
-
-
+#ifndef M_PI 
+#define M_PI       3.14159265358979323846   // pi
+#endif
 
 //	  | a b | |s|    w1
 //    | c d | |t|  = w2
