@@ -131,7 +131,55 @@ void EventManager::MouseMove    (int x, int y, OglForCLI *ogl)
   OpenglOnCli::MainForm_RedrawPanel();
 }
 
+static EVec3f GetPosOnSphere(const float &phi, const float &the) {
+	return EVec3f(
+		std::cos(phi) * std::cos(the),
+		std::sin(phi),
+		-std::cos(phi) * sin(the)
+	);
+}
 
+static void DrawSphere(int Ni, int Nj, int c_x, int c_y, int c_z) {
+	double phi1, the1, phi2, the2;
+	static double PI = 3.1415926535897932384626433832795028841971693993751058209749445928078164062;
+	std::vector<EVec3f> p(4);
+
+	glBegin(GL_TRIANGLES);
+
+	for (int i = 0; i < Ni; i++) {
+		for (int j = 0; j < Nj; j++) {
+			phi1 = PI * i / (Ni)-PI / 2;
+			the1 = PI * 2.0 * j / (Nj);
+			phi2 = PI * (i + 1) / (Ni)-PI / 2;
+			the2 = PI * 2.0 * (j + 1) / (Nj);
+			p[0] = GetPosOnSphere(phi1, the1);
+			p[1] = GetPosOnSphere(phi2, the1);
+			p[2] = GetPosOnSphere(phi1, the2);
+			p[3] = GetPosOnSphere(phi2, the2);
+
+
+			glNormal3f(p[0][0] + c_x, p[0][1] + c_y, p[0][2] + c_z);
+			glVertex3f(p[0][0] + c_x, p[0][1] + c_y, p[0][2] + c_z);
+
+			glNormal3f(p[1][0] + c_x, p[1][1] + c_y, p[1][2] + c_z);
+			glVertex3f(p[1][0] + c_x, p[1][1] + c_y, p[1][2] + c_z);
+
+			glNormal3f(p[3][0] + c_x, p[3][1] + c_y, p[3][2] + c_z);
+			glVertex3f(p[3][0] + c_x, p[3][1] + c_y, p[3][2] + c_z);
+
+
+			glNormal3f(p[0][0] + c_x, p[0][1] + c_y, p[0][2] + c_z);
+			glVertex3f(p[0][0] + c_x, p[0][1] + c_y, p[0][2] + c_z);
+
+			glNormal3f(p[2][0] + c_x, p[2][1] + c_y, p[2][2] + c_z);
+			glVertex3f(p[2][0] + c_x, p[2][1] + c_y, p[2][2] + c_z);
+
+			glNormal3f(p[3][0] + c_x, p[3][1] + c_y, p[3][2] + c_z);
+			glVertex3f(p[3][0] + c_x, p[3][1] + c_y, p[3][2] + c_z);
+		}
+	}
+	glEnd();
+}
 
 void EventManager::DrawScene()
 {
@@ -149,7 +197,7 @@ void EventManager::DrawScene()
   const static float shin[1] = { 64.0f };
 
   glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
   glEnable(GL_LIGHT2);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR  , spec);
@@ -157,50 +205,9 @@ void EventManager::DrawScene()
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT  , ambi);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin);
   
+	DrawSphere(20, 20, 0, 0, 0);
+	DrawSphere(20, 20, 1, 1, 1);
 
-  glBegin(GL_TRIANGLES );
-  
-  int Ni = 200;
-  int Nj = 200;
-  double p1, t1, p2, t2;
-  static double PI = 3.1415926535897932384626433832795028841971693993751058209749445928078164062;
-
-  for (int i=0; i<Ni; i++) {
-	  for (int j=0; j<Nj; j++) {
-		  p1 = PI  * i / (Ni) - PI/2;
-		  t1 = PI * 2.0 * j / (Nj);
-		  p2 = PI * (i+1) / (Ni)-PI / 2;
-		  t2 = PI * 2.0 * (j+1) / (Nj);
-
-
-		  
-		  glNormal3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
-		  glVertex3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
-
-		  glNormal3f(cos(p2)*cos(t1), sin(p2), -1 * cos(p2)*sin(t1));
-		  glVertex3f(cos(p2)*cos(t1), sin(p2), -1*cos(p2)*sin(t1));
-
-		  glNormal3f(cos(p2)*cos(t2), sin(p2), -1 * cos(p2)*sin(t2));
-		  glVertex3f(cos(p2)*cos(t2), sin(p2), -1*cos(p2)*sin(t2));
-
-
-
-		  glNormal3f(cos(p1)*cos(t1), sin(p1), -1*cos(p1)*sin(t1));
-		  glVertex3f(cos(p1)*cos(t1), sin(p1), -1 * cos(p1)*sin(t1));
-
-		  glNormal3f(cos(p1)*cos(t2), sin(p1), -1 * cos(p1)*sin(t2));
-		  glVertex3f(cos(p1)*cos(t2), sin(p1), -1 * cos(p1)*sin(t2));
-
-		  glNormal3f(cos(p2)*cos(t2), sin(p2), -1 * cos(p2)*sin(t2));
-		  glVertex3f(cos(p2)*cos(t2), sin(p2), -1*cos(p2)*sin(t2));
-
-	  }
-  }
-
-
-
-  glEnd();
- 
 }
 
 
